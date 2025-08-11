@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  country   String?  // useful for US-only checks
+  createdAt DateTime @default(now())
+  ledger    LedgerEntry[]
+  withdrawals Withdrawal[]
+}
+
+model LedgerEntry {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type          LedgerType
+  source        LedgerSource
+  amountPoints  Int      // positive for credit, negative for debit
+  externalTxId  String?  @unique
+  note          String?
+  createdAt     DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+enum LedgerType {
+  credit
+  debit
+  reversal
+}
+
+enum LedgerSource {
+  offerwall
+  withdrawal
+  admin_adjust
+}
+
+model Withdrawal {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amountPoints  Int
+  method        String   // e.g., paypal, giftcard
+  detailsJson   String   // JSON string with details (email/address/etc.)
+  status        WithdrawalStatus @default(pending)
+  createdAt     DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+enum WithdrawalStatus {
+  pending
+  approved
+  rejected
+}
