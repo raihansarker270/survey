@@ -10,7 +10,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <header className="border-b border-gray-800">
         <div className="container py-4 flex items-center justify-between">
           <Link href="/" className="text-xl font-semibold">
-            Survey<span className="text-emerald-400">MVP</span>
+            Surveyto<span className="text-emerald-400">Cash</span>
           </Link>
 
           <nav className="space-x-6 text-sm">
@@ -38,8 +38,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <main className="container py-8">{children}</main>
 
       <footer className="container py-12 text-sm text-gray-400">
-        © {new Date().getFullYear()} SurveyMVP. All rights reserved.
+        © {new Date().getFullYear()} Surveytocash. All rights reserved.
       </footer>
     </>
   );
 }
+
