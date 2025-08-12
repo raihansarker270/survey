@@ -7,35 +7,32 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <>
-      <header className="border-b border-gray-800">
-        <div className="container py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-semibold">
-            Surveyto<span className="text-emerald-400">Cash</span>
-          </Link>
+      <header className="border-b border-gray-800 fixed top-0 left-0 right-0 bg-darkGray z-50">
+  <div className="container py-4 flex items-center justify-between">
+    <Link href="/" className="text-xl font-semibold">
+      Surveyto<span className="text-emerald-400">Cash</span>
+    </Link>
 
-          <nav className="space-x-6 text-sm">
-            {isAuthed ? (
-              <>
-                <Link href="/dashboard">Dashboard</Link>
-                <Link href="/earn">Earn</Link>
-                <Link href="/withdraw">Withdraw</Link>
-                <form action="/api/auth/logout" method="POST" className="inline">
-                  <button type="submit" className="text-gray-300 hover:text-white">
-                    Logout
-                  </button>
-                </form>
-              </>
-            ) : (
-              <>
-                {/* হোমপেজেই Login/Register ফর্ম আছে */}
-                <Link href="/">Login / Register</Link>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
+    <nav className="space-x-6 text-sm">
+      {isAuthed ? (
+        <>
+          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/earn">Earn</Link>
+          <Link href="/withdraw">Withdraw</Link>
+          <form action="/api/auth/logout" method="POST" className="inline">
+            <button type="submit" className="text-gray-300 hover:text-white">
+              Logout
+            </button>
+          </form>
+        </>
+      ) : (
+        <Link href="/">Login / Register</Link>
+      )}
+    </nav>
+  </div>
+</header>
 
-      <main className="container py-8">{children}</main>
+<main className="container py-8 mt-20">{children}</main>
 
       <footer className="bg-darkGray text-gray-400 py-4">
   <div className="container mx-auto flex justify-between items-center">
@@ -51,5 +48,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     </>
   );
 }
+
 
 
