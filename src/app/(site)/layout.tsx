@@ -7,7 +7,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <>
-      <header className="border-b border-gray-800 fixed top-0 left-0 right-0 bg-darkGray z-50">
+      <header className="border-b border-gray-800">
   <div className="container py-4 flex items-center justify-between">
     <Link href="/" className="text-xl font-semibold">
       Surveyto<span className="text-emerald-400">Cash</span>
@@ -26,13 +26,16 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
           </form>
         </>
       ) : (
-        <Link href="/">Login / Register</Link>
+        <>
+          {/* হোমপেজেই Login/Register ফর্ম আছে */}
+          <Link href="/">Login / Register</Link>
+        </>
       )}
     </nav>
   </div>
 </header>
 
-<main className="container py-8 mt-20">{children}</main>
+<main className="container py-8">{children}</main>
 
       <footer className="bg-darkGray text-gray-400 py-4">
   <div className="container mx-auto flex justify-between items-center">
@@ -48,6 +51,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     </>
   );
 }
+
 
 
 
