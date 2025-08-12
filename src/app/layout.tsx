@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Survey MVP",
+  title: "SurveyToCash",
   description: "Earn points by completing surveys",
 };
 
