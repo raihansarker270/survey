@@ -13,10 +13,15 @@ function buildCpxUrl(opts: { uid: string; name?: string; email?: string }) {
 
   const secure_hash = md5(`${opts.uid}-${secret}`);
 
+  // ✅ cache-busting + trace
+  const now = Date.now().toString();
+
   const qs = new URLSearchParams({
     app_id: appId,
     ext_user_id: opts.uid,
     secure_hash,
+    subid_1: opts.uid, // trace: কোন ইউজার
+    subid_2: now,      // cache-busting nonce (প্রতি ভিউ/ক্লিকে নতুন হবে)
   });
   if (opts.name) qs.set("username", opts.name);
   if (opts.email) qs.set("email", opts.email);
@@ -28,13 +33,16 @@ function withUid(url: string | undefined, uid: string) {
   return url ? url.replace("{UID}", encodeURIComponent(uid)) : "";
 }
 
+// (ঐচ্ছিক) সবসময় fresh SSR চাইলে uncomment করুন
+// export const dynamic = "force-dynamic";
+
 export default async function EarnPage() {
   const session = getSessionFromCookie();
   if (!session) {
     return <div className="card text-sm">Please sign in to access surveys.</div>;
   }
 
-  const uid = session.userId;                     // uid অবশ্যই লাগবে
+  const uid = session.userId; // uid অবশ্যই লাগবে
   const email = session.email ?? undefined;
   const name = email ? email.split("@")[0] : undefined;
 
@@ -47,7 +55,7 @@ export default async function EarnPage() {
   const tabs = [
     { id: "cpx", label: "CPX Research", url: cpx },
     { id: "purespectrum", label: "PureSpectrum", url: ps },
-  ].filter(t => !!t.url); // যে URL নেই, ট্যাব দেখাবো না
+  ].filter((t) => !!t.url); // যে URL নেই, ট্যাব দেখাবো না
 
   const missing: string[] = [];
   if (!uid) missing.push("userId (uid)");
@@ -62,9 +70,7 @@ export default async function EarnPage() {
         {tabs.length > 0 ? (
           <EarnTabs tabs={tabs} />
         ) : (
-          <div className="text-sm text-red-300">
-            No provider URL is configured.
-          </div>
+          <div className="text-sm text-red-300">No provider URL is configured.</div>
         )}
       </div>
 
