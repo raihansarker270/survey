@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LoginModal from "./LoginModal";
 
-export default function AppHeader({ isAuthed = false }: { isAuthed?: boolean }) {
+export default function AppHeader({ isAuthed }: { isAuthed: boolean }) {
   const path = usePathname();
   const [showLogin, setShowLogin] = useState(false);
 
-  // /admin রুটে ইউজার হেডার না দেখাতে চাইলে (আপনার আগের লজিক)
+  // admin রুটে ইউজার হেডার না দেখাতে চাইলে
   if (path?.startsWith("/admin")) return null;
 
   return (
@@ -27,6 +27,11 @@ export default function AppHeader({ isAuthed = false }: { isAuthed?: boolean }) 
                 <Link href="/earn">Earn</Link>
                 <Link href="/withdraw">Withdraw</Link>
                 <Link href="/admin">Admin</Link>
+                <form action="/api/auth/logout" method="POST" className="inline">
+                  <button type="submit" className="text-gray-300 hover:text-white">
+                    Logout
+                  </button>
+                </form>
               </>
             ) : (
               <button
