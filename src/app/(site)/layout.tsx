@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getSessionFromCookie } from "@/src/lib/auth";
-import AppHeader from "@/src/app/components/AppHeader"; // ✅ সঠিক পাথ
+import AppHeader from "../components/AppHeader"; // ✅ সঠিক পাথ
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const session = getSessionFromCookie();
@@ -24,4 +24,5 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     </>
   );
 }
+
 
