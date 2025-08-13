@@ -1,15 +1,15 @@
-// src/app/(site)/layout.tsx
 import Link from "next/link";
 import { getSessionFromCookie } from "@/lib/auth";
-import AppHeader from "@/components/AppHeader"; // <-- fixed
+import AppHeader from "@/components/AppHeader";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
-  const session = getSessionFromCookie();
+  const session = getSessionFromCookie();   // { userId, email } | null (server-side)
   const isAuthed = !!session;
 
   return (
     <>
-      <AppHeader />
+      <AppHeader isAuthed={isAuthed} />
+
       <main className="container py-8">{children}</main>
 
       <footer className="bg-darkGray text-gray-400 py-4">
