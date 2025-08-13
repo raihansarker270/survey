@@ -17,7 +17,7 @@ export default function AppHeader({ isAuthed }: { isAuthed: boolean }) {
       <header className="border-b border-gray-800">
         <div className="container py-4 flex items-center justify-between">
           <Link href="/" className="text-xl font-semibold">
-            Survey<span className="text-emerald-400">MVP</span>
+            Surveyto<span className="text-emerald-400">CASH</span>
           </Link>
 
           <nav className="space-x-6 text-sm">
@@ -26,7 +26,7 @@ export default function AppHeader({ isAuthed }: { isAuthed: boolean }) {
                 <Link href="/dashboard">Dashboard</Link>
                 <Link href="/earn">Earn</Link>
                 <Link href="/withdraw">Withdraw</Link>
-                <Link href="/admin">Admin</Link>
+                <Link href="/admin"></Link>
                 <form action="/api/auth/logout" method="POST" className="inline">
                   <button type="submit" className="text-gray-300 hover:text-white">
                     Logout
@@ -51,3 +51,4 @@ export default function AppHeader({ isAuthed }: { isAuthed: boolean }) {
     </>
   );
 }
+
