@@ -3,15 +3,13 @@ import { getSessionFromCookie } from "@/lib/auth";
 import AppHeader from "@/components/AppHeader";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
-  const session = getSessionFromCookie();   // { userId, email } | null (server-side)
+  const session = getSessionFromCookie();        // server-side cookie read
   const isAuthed = !!session;
 
   return (
     <>
-      <AppHeader isAuthed={isAuthed} />
-
+      <AppHeader isAuthed={isAuthed} />          {/* ✅ প্রপ পাঠানো হচ্ছে */}
       <main className="container py-8">{children}</main>
-
       <footer className="bg-darkGray text-gray-400 py-4">
         <div className="container mx-auto flex justify-between items-center">
           <p>© {new Date().getFullYear()} SurveyToCash. All rights reserved.</p>
