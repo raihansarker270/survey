@@ -1,18 +1,15 @@
 import Link from "next/link";
 import { getSessionFromCookie } from "@/src/lib/auth";
-import SiteHeader from "@/src/components/SiteHeader";
+import AppHeader from "../components/AppHeader"; // ✅ সঠিক পাথ
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
-  const session = getSessionFromCookie(); // { userId, email } | null (server-side)
-  const isAuthed = !!session;
+  const session = getSessionFromCookie();
+  const isAuthed = !!session; // চাইলে পরে AppHeader-এ prop হিসেবে পাঠাতে পারেন
 
   return (
     <>
-      {/* Header is static; modal handled inside client header */}
-      <SiteHeader isAuthed={isAuthed} />
-
+      <AppHeader /> {/* বা চাইলে <AppHeader isAuthed={isAuthed} /> করবেন */}
       <main className="container py-8">{children}</main>
-
       <footer className="bg-darkGray text-gray-400 py-4">
         <div className="container mx-auto flex justify-between items-center">
           <p>© {new Date().getFullYear()} SurveyToCash. All rights reserved.</p>
