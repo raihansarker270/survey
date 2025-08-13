@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import LoginModal from "@/src/app/components/LoginModal"; // সঠিক path ঠিক রাখো
+import LoginModal from "./LoginModal"; // সঠিক path ঠিক রাখো
 
 export default function AppHeader() {
   const path = usePathname();
@@ -41,3 +41,4 @@ export default function AppHeader() {
     </>
   );
 }
+
