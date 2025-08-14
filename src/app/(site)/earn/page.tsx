@@ -80,10 +80,5 @@ export default async function EarnPage() {
           Missing config: {missing.join(", ")}. Check your <code>.env</code> and restart dev server.
         </div>
       )}
-
-      <div className="text-xs text-gray-400">
-        CPX secure hash সার্ভারে জেনারেট হচ্ছে—secret ক্লায়েন্টে এক্সপোজড নয়।
-      </div>
-    </div>
   );
 }
