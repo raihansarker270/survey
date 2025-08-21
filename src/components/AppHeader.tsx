@@ -5,50 +5,105 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LoginModal from "./LoginModal";
 
-export default function AppHeader({ isAuthed }: { isAuthed: boolean }) {
+type Props = {
+  isAuthed: boolean;
+};
+
+export default function AppHeader({ isAuthed }: Props) {
   const path = usePathname();
   const [showLogin, setShowLogin] = useState(false);
 
-  // admin রুটে ইউজার হেডার না দেখাতে চাইলে
+  // admin route-এ header না দেখানোর জন্য
   if (path?.startsWith("/admin")) return null;
 
   return (
     <>
-      <header className="border-b border-gray-800">
-        <div className="container py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-semibold">
-            Surveyto<span className="text-emerald-400">CASH</span>
+      <header className="container header flex justify-between items-center py-6">
+        {/* Logo */}
+        <Link href="/" className="logo">
+          <svg
+            width="250"
+            height="45"
+            viewBox="0 0 250 45"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="0" y="0" width="45" height="45" rx="15" fill="#164ed0" />
+            <path
+              d="M15 30c8-10 16-10 24 0"
+              stroke="white"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <text
+              x="55"
+              y="32"
+              fontFamily="Montserrat, sans-serif"
+              fontSize="22"
+              fontWeight="700"
+              fill="#164ed0"
+            >
+              SurveyToCash
+            </text>
+          </svg>
+        </Link>
+
+        {/* Navigation Links */}
+        <nav className="nav flex gap-4 items-center">
+          <Link
+            href="/how-it-works"
+            className="nav-link text-gray-700 hover:text-black"
+          >
+            How it works
           </Link>
 
-          <nav className="space-x-6 text-sm">
-            {isAuthed ? (
-              <>
-                <Link href="/dashboard">Dashboard</Link>
-                <Link href="/earn">Earn</Link>
-                <Link href="/withdraw">Withdraw</Link>
-                <Link href="/admin"></Link>
-                <form action="/api/auth/logout" method="POST" className="inline">
-                  <button type="submit" className="text-gray-300 hover:text-white">
-                    Logout
-                  </button>
-                </form>
-              </>
-            ) : (
+          {isAuthed ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="nav-link text-gray-700 hover:text-black"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/earn"
+                className="nav-link text-gray-700 hover:text-black"
+              >
+                Earn
+              </Link>
+              <Link
+                href="/withdraw"
+                className="nav-link text-gray-700 hover:text-black"
+              >
+                Withdraw
+              </Link>
+              <form action="/api/auth/logout" method="POST" className="inline">
+                <button
+                  type="submit"
+                  className="btn btn-outline text-gray-700 hover:text-black"
+                >
+                  Logout
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              {/* Access button opens LoginModal */}
               <button
                 onClick={() => setShowLogin(true)}
-                className="text-gray-300 hover:text-white"
+                className="btn btn-gradient"
               >
-                Login / Register
+                Access
               </button>
-            )}
-          </nav>
-        </div>
+            </>
+          )}
+        </nav>
       </header>
 
+      {/* Login Modal */}
       {showLogin && (
         <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
       )}
     </>
   );
 }
-

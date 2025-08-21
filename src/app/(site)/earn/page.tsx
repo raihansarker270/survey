@@ -1,10 +1,25 @@
 import EarnTabs from "./EarnTabs";
 import { getSessionFromCookie } from "@/lib/auth";
 import { buildCpxUrl } from "@/lib/cpx";
+import Link from "next/link";
 
 export default async function EarnPage() {
   const session = getSessionFromCookie();
-  if (!session) return <div>Please sign in to access surveys.</div>;
+  if (!session) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="bg-white rounded-xl shadow p-6 text-center">
+          <p className="text-gray-600">
+            Please{" "}
+            <Link href="/" className="text-blue-600 hover:underline">
+              sign in
+            </Link>{" "}
+            to access surveys.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const uid = session.userId;
   const email = session.email ?? undefined;
@@ -17,10 +32,19 @@ export default async function EarnPage() {
   ].filter((t) => !!t.url);
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Earn Surveys</h1>
-      <div className="card">
-        {tabs.length > 0 ? <EarnTabs tabs={tabs} /> : <div>No provider URL configured</div>}
+    <div className="container mx-auto px-4 py-10 space-y-8">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+        Earn <span className="text-blue-600">Surveys</span>
+      </h1>
+
+      <div className="bg-white rounded-xl shadow p-6">
+        {tabs.length > 0 ? (
+          <EarnTabs tabs={tabs} />
+        ) : (
+          <div className="text-gray-500 text-center py-4">
+            No provider URL configured
+          </div>
+        )}
       </div>
     </div>
   );

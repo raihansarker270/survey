@@ -1,103 +1,101 @@
 "use client";
 
+import Link from "next/link";
+import Card from "@/components/Card";
+import Button from "@/components/Button";
 import { useState } from "react";
+import LoginModal from "@/components/LoginModal"; // Ensure modal import
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [showLogin, setShowLogin] = useState(false);
 
-  async function login(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setMessage(null);
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-    const data = await res.json();
-    setLoading(false);
-    setMessage(data.message || (res.ok ? "Logged in!" : "Login failed"));
-    if (res.ok) {
-      window.location.href = "/dashboard";
-    }
-  }
+  const openLoginModal = () => {
+    setShowLogin(true);
+  };
 
   return (
-    <div className="grid md:grid-cols-2 gap-8 items-center">
-      <div className="space-y-6">
-        {/* Hero */}
-        <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-          Get Paid for Your Opinion —{" "}
-          <span className="text-emerald-400">Join US Surveys &amp; Earn Rewards</span>
-        </h1>
+    <div className="w-full min-h-screen bg-bg font-montserrat text-text">
+      {/* Hero Section */}
+      <section className="hero relative">
+        <div className="container hero-inner grid md:grid-cols-2 gap-12 py-16 items-center">
+          
+          {/* Left Column */}
+          <div className="hero-copy space-y-6">
+            <h1 className="text-5xl font-bold leading-tight text-gray-900">
+              Earn money by taking surveys & playing games
+            </h1>
+            <p className="lead text-gray-700 max-w-xl mt-4">
+              Fast payouts, fair rewards. Join a global community completing surveys and light games from trusted partners.
+            </p>
 
-        <p className="text-gray-300">
-          Share your thoughts, complete fun surveys, and earn real rewards.
-          Quick sign-up, instant credits, and safe payouts — all in one place.
-        </p>
+            <div className="hero-cta flex gap-4 mt-8">
+              <Button onClick={openLoginModal} variant="gradient" large>
+                Get started — it’s free
+              </Button>
+              <Button onClick={openLoginModal} variant="secondary" large>
+                I already have an account
+              </Button>
+            </div>
 
-        {/* Sign in form */}
-        <form onSubmit={login} className="card space-y-3 max-w-md">
-          <label className="label">Sign in with your email to start earning</label>
-          <input
-            className="input"
-            placeholder="you@example.com"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <button className="btn" disabled={loading}>
-            {loading ? "Signing in..." : "Start Earning"}
-          </button>
-          {message && <div className="text-sm text-gray-300">{message}</div>}
-        </form>
-      </div>
-
-      {/* Right column: Features */}
-      <div className="card">
-        <h3 className="text-lg font-semibold mb-3">Why Join Us?</h3>
-        <ul className="space-y-2 text-gray-300 list-disc ml-5">
-          <li>Complete surveys anytime, anywhere</li>
-          <li>Instant credit to your wallet</li>
-          <li>Safe &amp; secure payouts</li>
-          <li>US-only for best-matched surveys</li>
-          <li>Simple and easy — no passwords needed</li>
-        </ul>
-      </div>
-
-      {/* Cashout Methods (SVG) */}
-      <div className="md:col-span-2 mt-2">
-        <div className="card">
-          <h3 className="text-lg font-semibold mb-4">You can cash out via:</h3>
-          <div className="flex flex-wrap gap-6 items-center">
-            <IconItem src="/images/paypal.svg" label="PayPal" />
-            <IconItem src="/images/amazon.svg" label="Amazon Gift Card" />
-            <IconItem src="/images/apple.svg" label="Apple Gift Card" />
-            <IconItem src="/images/crypto.svg" label="Crypto" />
+            <ul className="hero-points list-disc ml-5 mt-6 text-muted space-y-1 text-gray-600">
+              <li>✔ Average survey time: 5–15 minutes</li>
+              <li>✔ Multiple payout options</li>
+              <li>✔ Fraud prevention to protect rewards</li>
+            </ul>
           </div>
-          <p className="text-xs text-gray-400 mt-4">
-            * Availability may vary. Additional methods can be added over time.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-/** Small presentational component for cashout icons */
-function IconItem({ src, label }: { src: string; label: string }) {
-  return (
-    <div className="flex flex-col items-center text-sm text-gray-300">
-      <img
-        src={src}
-        alt={label}
-        className="h-10 w-auto transition-transform duration-150 hover:scale-105"
-        loading="lazy"
-      />
-      <span className="mt-2">{label}</span>
+          {/* Right Column */}
+          <div className="hero-visual flex justify-center">
+            <Card className="stat max-w-sm w-full">
+              <div className="stat-top flex justify-between items-center">
+                <span className="stat-title text-gray-500">Total Paid</span>
+                <span className="stat-amount font-bold text-2xl text-gray-900">$10000+</span>
+              </div>
+              <div className="stat-chart mt-4 h-36 bg-gradient-to-b from-blue-200/25 to-pink-200/15 rounded-lg" aria-hidden="true"></div>
+              <div className="stat-bottom mt-2">
+                <span className="tiny text-gray-500">Last updated just now</span>
+              </div>
+            </Card>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Trust Section */}
+      <section className="trust container py-16">
+        <div className="trust-grid grid md:grid-cols-3 gap-6">
+          <Card className="trust-item p-6">
+            <h3 className="font-semibold mb-2">Fast payouts</h3>
+            <p>Cash out once you reach the minimum threshold with PayPal, gift cards and more.</p>
+          </Card>
+          <Card className="trust-item p-6">
+            <h3 className="font-semibold mb-2">Fair rewards</h3>
+            <p>We share more of the value back to you. Your time matters.</p>
+          </Card>
+          <Card className="trust-item p-6">
+            <h3 className="font-semibold mb-2">Anti-fraud</h3>
+            <p>Multiple checks keep the platform clean and advertisers happy.</p>
+          </Card>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta container">
+        <Card className="cta-card  gap-6">
+          <h2 className="text-3xl font-bold text-gray-900">Ready to earn?</h2>
+          <p>Create your free account and see available surveys tailored to you.</p>
+          <Link href="/signup">
+            <Button variant="gradient" fullWidth large>Sign up</Button>
+          </Link>
+        </Card>
+      </section>
+
+      {/* Footer removed! It is handled by SiteLayout */}
+      
+      {/* Login Modal */}
+      {showLogin && (
+        <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
+      )}
     </div>
   );
 }

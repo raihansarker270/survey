@@ -1,92 +1,86 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
 
-export default function LoginModal({
-  isOpen,
-  onClose,
-}: { isOpen: boolean; onClose: () => void }) {
+import { useState } from "react";
+import Input from "./Input";
+import Button from "./Button";
+
+type Props = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export default function LoginModal({ isOpen, onClose }: Props) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-
-  // Close on ESC
-  useEffect(() => {
-    if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
 
   async function login(e: React.FormEvent) {
     e.preventDefault();
-    if (loading) return;
     setLoading(true);
     setMessage(null);
+
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.message || "Login failed");
-      onClose();
-      window.location.href = "/dashboard";
-    } catch (err: any) {
-      setMessage(err.message || "Something went wrong");
+      const data = await res.json();
+      setMessage(data.message || (res.ok ? "Logged in!" : "Login failed"));
+      if (res.ok) window.location.href = "/dashboard";
+    } catch (err) {
+      setMessage("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
-  // Click on backdrop to close (but ignore clicks inside dialog)
-  function backdropClick(e: React.MouseEvent) {
-    if (e.target === dialogRef.current) onClose();
-  }
-
-  const canSubmit = email.trim().length > 3;
+  if (!isOpen) return null;
 
   return (
+    // Overlay with click-to-close
     <div
-      ref={dialogRef}
-      onMouseDown={backdropClick}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="login-title"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      onClick={onClose} // click overlay closes modal
     >
-      <div className="w-full max-w-md rounded-xl bg-gray-900 p-6 shadow-xl" onMouseDown={(e) => e.stopPropagation()}>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 id="login-title" className="text-lg font-semibold text-white">Login / Register</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white" aria-label="Close modal">
-            &times;
-          </button>
-        </div>
+      <div
+        className="relative bg-white p-6 rounded-xl w-full max-w-md shadow-lg"
+        onClick={(e) => e.stopPropagation()} // prevent modal click closing
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-500 hover:text-black font-bold text-xl"
+        >
+          ×
+        </button>
 
-        <form onSubmit={login} className="space-y-3">
-          <input
-            className="input w-full"
-            placeholder="you@example.com"
+        <h2 className="text-xl font-bold mb-4 text-center">
+          Sign in with your email
+        </h2>
+
+        <form onSubmit={login} className="space-y-4">
+          <Input
             type="email"
-            autoComplete="email"
-            inputMode="email"
-            required
-            autoFocus
+            placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
-          <button className="btn w-full" disabled={loading || !canSubmit}>
+          <Button
+            type="submit"
+            variant="gradient"
+            fullWidth
+            large
+            disabled={loading}
+          >
             {loading ? "Signing in..." : "Start Earning"}
-          </button>
-          {message && (
-            <div className="text-sm text-red-400" aria-live="polite">
-              {message}
-            </div>
-          )}
+          </Button>
         </form>
+
+        {message && (
+          <p className="mt-2 text-center text-sm text-red-600">{message}</p>
+        )}
       </div>
     </div>
   );
