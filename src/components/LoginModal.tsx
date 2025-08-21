@@ -65,7 +65,7 @@ export default function LoginModal({ isOpen, onClose }: Props) {
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            required={true}
           />
           <Button
             type="submit"
