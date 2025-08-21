@@ -5,6 +5,7 @@ interface ButtonProps {
   large?: boolean;
   onClick?: () => void;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset"; // ✅ Add type prop
 }
 
 export default function Button({
@@ -13,11 +14,13 @@ export default function Button({
   fullWidth = false,
   large = false,
   onClick,
-  disabled = false
+  disabled = false,
+  type = "button", // ✅ default type
 }: ButtonProps) {
-  const classes = `btn btn-${variant} ${fullWidth ? 'btn-full' : ''} ${large ? 'btn-large' : ''}`;
+  const classes = `btn btn-${variant} ${fullWidth ? "btn-full" : ""} ${large ? "btn-large" : ""}`;
+
   return (
-    <button className={classes} onClick={onClick} disabled={disabled}>
+    <button type={type} className={classes} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
